@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .mainDiv > .menu {
+        width: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const fetchProduct = async (elem) => {
+        try {
+          const productName = elem.value.toString();
+          const addProductFetch = await fetch(
+            "http://localhost:3000/cart/add",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ productName: productName }),
+            }
+          );
+          const result = await addProductFetch;
+          console.log(result);
+        } catch (err) {
+          console.log(err.message);
+        }
+      };
+    </script>
+    <div
+      style="display: flex; flex-direction: row; width: 100%"
+      class="mainDiv"
+    >
+      <div class="menu bg-dark"><%- include('./menu.ejs') %></div>
+      <div style="margin: 10px">
+        <% products.forEach((elem,id)=>{ %>
+        <section style="background-color: #eee">
+          <div class="card">
+            <div class="d-flex justify-content p-3">
+              <img
+                style="width: 250px; height: 250px"
+                src="<%= elem.photoId %>"
+                class="card-img-top"
+                alt="Laptop"
+              />
+              <div class="d-flex align-items-start flex-column">
+                <h3 style="margin: 5px">Opis</h3>
+                <p style="margin: 5px">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
+                  aliquet tempus bibendum. Vestibulum molestie ipsum et ex
+                  facilisis dignissim. Curabitur finibus eu leo id interdum.
+                  Etiam vitae cursus erat, ut luctus neque. Duis varius, risus
+                  vitae lobortis auctor, purus eros placerat erat, fringilla
+                  hendrerit velit metus pharetra libero. Nam eget velit at lacus
+                  accumsan molestie id in nisi. Duis mattis, ex id rhoncus
+                  venenatis, quam elit rhoncus mauris, in pretium mi ex id orci.
+                </p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-start mb-3">
+                <h5 class="mb-0" style="margin: 5px"><%= elem.name %></h5>
+                <h5 class="text-dark mb-0" style="margin: 5px">
+                  <%= elem.price %>$
+                </h5>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <button
+                  type="button"
+                  value="<%= elem.name%>"
+                  onclick="fetchProduct(this)"
+                  class="btn btn-primary"
+                >
+                  Buy now
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+</html>
